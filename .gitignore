@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+build/
+dist/
+
+# Dados: PDFs e índice são grandes e reprodutíveis (baixar / `rag index`).
+# Só a estrutura de pastas e o dataset de avaliação vão para o git.
+data/raw/*
+!data/raw/.gitkeep
+data/index/
+
+# Ferramentas
+.pytest_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+.env
+
+# Editor / SO
+.vscode/
+.idea/
+.DS_Store

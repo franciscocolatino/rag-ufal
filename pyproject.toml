@@ -1,0 +1,34 @@
+[project]
+name = "rag-ufal"
+version = "0.1.0"
+description = "RAG com citação de fonte sobre documentos públicos da UFAL, com avaliação de retrieval e geração."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "numpy>=1.26",
+    "ollama>=0.4",
+    "pypdf>=5.0",
+    "rank-bm25>=0.2.2",
+    "sentence-transformers>=6.3",
+    # torch é dependência indireta do sentence-transformers, mas precisa estar
+    # listado aqui para que o [tool.uv.sources] abaixo valha para ele.
+    "torch>=2.4",
+]
+
+[project.scripts]
+rag = "rag_ufal.cli:main"
+
+[build-system]
+requires = ["uv_build>=0.10,<0.11"]
+build-backend = "uv_build"
+
+# torch CPU-only: o wheel padrão do PyPI para Linux traz CUDA (~3 GB a mais).
+# O índice oficial do PyTorch tem builds "+cpu" bem menores. `explicit = true`
+# faz o uv usar esse índice SÓ para o torch; todo o resto continua vindo do PyPI.
+[tool.uv.sources]
+torch = [{ index = "pytorch-cpu" }]
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
