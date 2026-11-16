@@ -81,6 +81,28 @@ def ask_once(index: Index, question: str, args: argparse.Namespace) -> None:
             print(f"  - {r.chunk.source}, p. {r.chunk.page}")
 
 
+def cmd_eval(args: argparse.Namespace) -> None:
+    from rag_ufal import evaluate
+
+    index = Index.load(args.index_dir)
+    questions = evaluate.load_questions(args.questions)
+    n_ans = sum(q.answerable for q in questions)
+    print(f"{len(questions)} perguntas ({n_ans} com resposta, {len(questions) - n_ans} sem) | "
+          f"índice: chunk {index.meta['chunk_size']}/{index.meta['chunk_overlap']}, {index.meta['embed_model']}\n")
+
+    report = evaluate.evaluate_retrieval(index, questions, args.modes)
+    evaluate.save_report({"index": index.meta, "retrieval": report}, args.out_dir / f"{args.tag}-retrieval.json")
+    print("Retrieval:\n" + evaluate.retrieval_table(report))
+
+    if args.answers:
+        print(f"\nRespostas (modo {args.mode}, k={args.k}) — uma chamada ao LLM por pergunta...")
+        report = evaluate.evaluate_answers(index, questions, args.mode, args.k)
+        evaluate.save_report({"index": index.meta, "llm": config.LLM_MODEL, "answers": report},
+                             args.out_dir / f"{args.tag}-answers.json")
+        print(evaluate.answers_table(report))
+    print(f"\nDetalhes por pergunta em {args.out_dir}/{args.tag}-*.json")
+
+
 def print_results(results: list[SearchResult]) -> None:
     if not results:
         print("(nenhum resultado)")
@@ -116,6 +138,15 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--show-context", action="store_true", help="mostra os trechos enviados ao LLM")
     p.set_defaults(func=cmd_ask)
 
+    p = sub.add_parser("eval", parents=[retrieval], help="métricas de retrieval (e, com --answers, das respostas)")
+    p.add_argument("--questions", type=Path, default=config.EVAL_FILE)
+    p.add_argument("--modes", nargs="+", choices=SEARCH_MODES, default=list(SEARCH_MODES),
+                   help="modos de busca comparados no retrieval")
+    p.add_argument("--answers", action="store_true", help="também avalia as respostas do LLM (lento)")
+    p.add_argument("--tag", default="baseline", help="prefixo dos arquivos de resultado")
+    p.add_argument("--out-dir", type=Path, default=config.RESULTS_DIR)
+    p.set_defaults(func=cmd_eval)
+
     return parser
 
 
@@ -135,7 +166,7 @@ def main(argv: list[str] | None = None) -> None:
     except ConnectionError:
         sys.exit("erro: não consegui falar com o Ollama — ele está rodando? (`ollama serve`)")
     except ollama.ResponseError as e:
-        sys.exit(f"erro do Ollama: {e.error} — o modelo foi baixado? (`ollama pull {args.llm}`)")
+        sys.exit(f"erro do Ollama: {e.error} — o modelo foi baixado? (`ollama pull {getattr(args, 'llm', config.LLM_MODEL)}`)")
 
 
 if __name__ == "__main__":
