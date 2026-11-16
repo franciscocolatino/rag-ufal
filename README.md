@@ -205,7 +205,7 @@ Requisitos: Python 3.12, [`uv`](https://docs.astral.sh/uv/), [Ollama](https://ol
 ```bash
 uv sync                        # dependências (torch CPU-only, ~1,2 GB)
 ollama pull qwen2.5:3b         # LLM (1,9 GB)
-# PDFs: baixe os documentos listados abaixo para data/raw/
+uv run python scripts/download_pdfs.py  # baixa os 5 PDFs para data/raw/ (confere SHA-256)
 uv run rag index               # lê PDFs, gera embeddings, salva em data/index/
 uv run rag search "trancamento de matrícula"      # só o retrieval (debug)
 uv run rag ask "Quando começa o semestre 2026.2?" # resposta com fontes
@@ -217,7 +217,7 @@ uv run rag eval --answers      # + métricas das respostas do LLM (~10 min)
 Configuração por variável de ambiente (`RAG_CHUNK_SIZE`, `RAG_EMBED_MODEL`,
 `RAG_SEARCH_MODE`, `RAG_LLM_MODEL`, …): ver [`config.py`](src/rag_ufal/config.py).
 
-Documentos usados (salvos com estes nomes em `data/raw/`):
+Documentos usados (o script acima os salva com estes nomes em `data/raw/`):
 
 | arquivo | documento |
 |---|---|
@@ -238,7 +238,7 @@ src/rag_ufal/
   generate.py   prompt + Ollama, citação por marcador
   evaluate.py   hit@k, MRR, acurácia, recusa, citação
   cli.py        rag index | search | ask | eval
-scripts/        build_eval.py (gabarito por âncora), chunk_experiment.py
+scripts/        download_pdfs.py, build_eval.py (gabarito por âncora), chunk_experiment.py
 data/eval/      dataset de avaliação
 results/        saídas dos experimentos
 ```
