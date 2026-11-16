@@ -1,0 +1,203 @@
+{
+  "created_at": "2026-11-16T16:07:18+00:00",
+  "index": {
+    "embed_model": "intfloat/multilingual-e5-small",
+    "dim": 384,
+    "chunk_size": 200,
+    "chunk_overlap": 40,
+    "n_chunks": 653,
+    "sources": [
+      "calendario-2026-2.pdf",
+      "calendario-2026.pdf",
+      "estatuto-regimento-geral.pdf",
+      "ppc-ciencia-computacao.pdf",
+      "regimento-graduacao.pdf"
+    ],
+    "created_at": "2026-11-14T21:35:30+00:00"
+  },
+  "retrieval": {
+    "dense": {
+      "metrics": {
+        "hit@1": 0.627906976744186,
+        "hit@3": 0.7906976744186046,
+        "hit@5": 0.8604651162790697,
+        "hit@10": 0.9302325581395349,
+        "mrr@10": 0.715014765596161
+      },
+      "per_question": [
+        {
+          "question": "Qual a porcentagem mínima de presença para passar numa disciplina?",
+          "rank": 2
+        },
+        {
+          "question": "Com que média eu passo direto numa matéria, sem precisar fazer prova final?",
+          "rank": 1
+        },
+        {
+          "question": "Como é calculada a média parcial a partir das três AVs?",
+          "rank": 1
+        },
+        {
+          "question": "Qual a média mínima para ter direito de fazer a prova final?",
+          "rank": 1
+        },
+        {
+          "question": "Depois da prova final, que nota preciso alcançar para ser aprovado?",
+          "rank": 1
+        },
+        {
+          "question": "Quanto pesa a prova final no cálculo da média final?",
+          "rank": 1
+        },
+        {
+          "question": "Perdi a prova final por estar doente. Até quando posso pedir segunda chamada?",
+          "rank": 1
+        },
+        {
+          "question": "Se eu faltar a uma avaliação, que nota fico nela?",
+          "rank": 9
+        },
+        {
+          "question": "A UFAL abona faltas?",
+          "rank": null
+        },
+        {
+          "question": "Até quantos dias depois do início do semestre posso trancar uma disciplina?",
+          "rank": 1
+        },
+        {
+          "question": "Calouro pode trancar matrícula logo no primeiro período?",
+          "rank": 1
+        },
+        {
+          "question": "Depois que peço o trancamento de uma disciplina no SIGAA, em quanto tempo ele é efetivado?",
+          "rank": 1
+        },
+        {
+          "question": "Quantas vezes no máximo posso suspender o curso?",
+          "rank": 1
+        },
+        {
+          "question": "Na matrícula extraordinária dá para se matricular em disciplina que tem pré-requisito?",
+          "rank": 1
+        },
+        {
+          "question": "Quem reprovou por falta pode entrar na turma de reposição?",
+          "rank": 1
+        },
+        {
+          "question": "Para aproveitar uma disciplina cursada em outra faculdade, quanto do conteúdo precisa coincidir?",
+          "rank": null
+        },
+        {
+          "question": "Por quanto tempo dura o mandato do reitor da UFAL?",
+          "rank": 3
+        },
+        {
+          "question": "Quem nomeia o reitor?",
+          "rank": 3
+        },
+        {
+          "question": "Quem monta a lista de candidatos a reitor enviada ao governo?",
+          "rank": 1
+        },
+        {
+          "question": "Quanto tempo dura o mandato de um estudante representante no conselho universitário?",
+          "rank": 1
+        },
+        {
+          "question": "O diretor de um instituto pode ser reeleito para o mandato seguinte?",
+          "rank": 1
+        },
+        {
+          "question": "Em que ano a UFAL foi criada?",
+          "rank": 1
+        },
+        {
+          "question": "Qual o nome do campus sede da UFAL?",
+          "rank": 1
+        },
+        {
+          "question": "Quem preside o Conselho Universitário?",
+          "rank": 4
+        },
+        {
+          "question": "Qual a carga horária total do curso de Ciência da Computação?",
+          "rank": 1
+        },
+        {
+          "question": "Qual o prazo máximo para concluir Ciência da Computação?",
+          "rank": 1
+        },
+        {
+          "question": "Em quanto tempo dá para se formar em Ciência da Computação, no mínimo?",
+          "rank": 1
+        },
+        {
+          "question": "Quantas vagas por ano o curso de Ciência da Computação oferece?",
+          "rank": 1
+        },
+        {
+          "question": "Ciência da Computação é um curso noturno?",
+          "rank": 1
+        },
+        {
+          "question": "Quantas horas vale o TCC de Ciência da Computação?",
+          "rank": 4
+        },
+        {
+          "question": "O TCC de Ciência da Computação pode ser feito em dupla?",
+          "rank": null
+        },
+        {
+          "question": "Quantas horas de atividades complementares preciso cumprir em Ciência da Computação?",
+          "rank": 3
+        },
+        {
+          "question": "Quantas horas de extensão o curso de Ciência da Computação exige?",
+          "rank": 8
+        },
+        {
+          "question": "Quantas horas de disciplinas eletivas existem no currículo de Ciência da Computação?",
+          "rank": 1
+        },
+        {
+          "question": "Em que dia começam as aulas do semestre 2026.2?",
+          "rank": 7
+        },
+        {
+          "question": "Quando começou o semestre 2026.1?",
+          "rank": 1
+        },
+        {
+          "question": "Qual o último dia para pedir trancamento de disciplina em 2026.2?",
+          "rank": 2
+        },
+        {
+          "question": "Quando é a semana de provas finais de 2026.2?",
+          "rank": 1
+        },
+        {
+          "question": "Quando acontece a reavaliação (3ª AV) no semestre 2026.2?",
+          "rank": 3
+        },
+        {
+          "question": "Quando abre a solicitação de matrícula para 2026.2?",
+          "rank": 1
+        },
+        {
+          "question": "O Dia do Estudante é feriado na UFAL? Em que data cai?",
+          "rank": 3
+        },
+        {
+          "question": "Quantos dias letivos o semestre 2026.2 tem no campus A. C. Simões?",
+          "rank": 1
+        },
+        {
+          "question": "Qual o prazo final para lançar as notas da AB1 em 2026.2?",
+          "rank": 5
+        }
+      ]
+    }
+  }
+}

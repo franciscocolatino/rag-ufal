@@ -1,0 +1,789 @@
+{
+  "created_at": "2026-11-16T16:26:15+00:00",
+  "index": {
+    "embed_model": "intfloat/multilingual-e5-small",
+    "dim": 384,
+    "chunk_size": 200,
+    "chunk_overlap": 40,
+    "n_chunks": 653,
+    "sources": [
+      "calendario-2026-2.pdf",
+      "calendario-2026.pdf",
+      "estatuto-regimento-geral.pdf",
+      "ppc-ciencia-computacao.pdf",
+      "regimento-graduacao.pdf"
+    ],
+    "created_at": "2026-11-14T21:35:30+00:00"
+  },
+  "llm": "qwen2.5:3b",
+  "answers": {
+    "mode": "hybrid",
+    "k": 5,
+    "metrics": {
+      "n_answerable": 43,
+      "n_unanswerable": 8,
+      "accuracy": 0.5813953488372093,
+      "false_refusal": 0.13953488372093023,
+      "citation_correct": 0.4883720930232558,
+      "correct_refusal": 1,
+      "mean_latency_s": 11.588823529411766
+    },
+    "per_question": [
+      {
+        "question": "Qual a porcentagem mínima de presença para passar numa disciplina?",
+        "answerable": true,
+        "expected": [
+          "75%",
+          "75 %",
+          "setenta e cinco"
+        ],
+        "output": "Não encontrei essa informação nos documentos.",
+        "refused": true,
+        "correct": false,
+        "cited": false,
+        "citation_correct": false,
+        "retrieved_relevant": false,
+        "latency_s": 10.51
+      },
+      {
+        "question": "Com que média eu passo direto numa matéria, sem precisar fazer prova final?",
+        "answerable": true,
+        "expected": [
+          "7,0",
+          "7,00",
+          "7.0",
+          "sete"
+        ],
+        "output": "5,50 (cinco inteiros e cinco décimos) [T2].",
+        "refused": false,
+        "correct": false,
+        "cited": true,
+        "citation_correct": true,
+        "retrieved_relevant": true,
+        "latency_s": 10.71
+      },
+      {
+        "question": "Como é calculada a média parcial a partir das três AVs?",
+        "answerable": true,
+        "expected": [
+          "duas maiores notas",
+          "duas maiores"
+        ],
+        "output": "A média parcial é dada pela média aritmética das duas maiores notas dentre as três verificações de aprendizagem (1a V. A., 2a V. A. e 3a V. A.) [T1].",
+        "refused": false,
+        "correct": true,
+        "cited": true,
+        "citation_correct": true,
+        "retrieved_relevant": true,
+        "latency_s": 11.9
+      },
+      {
+        "question": "Qual a média mínima para ter direito de fazer a prova final?",
+        "answerable": true,
+        "expected": [
+          "5,00",
+          "5,0",
+          "5.0",
+          "cinco"
+        ],
+        "output": "A média mínima para ter direito de fazer a prova final é 5,00 [T1].",
+        "refused": false,
+        "correct": true,
+        "cited": true,
+        "citation_correct": true,
+        "retrieved_relevant": true,
+        "latency_s": 10.59
+      },
+      {
+        "question": "Depois da prova final, que nota preciso alcançar para ser aprovado?",
+        "answerable": true,
+        "expected": [
+          "5,5",
+          "5.5",
+          "cinco inteiros e cinco"
+        ],
+        "output": "5,50 (cinco inteiros e cinco décimos) [T7].",
+        "refused": false,
+        "correct": true,
+        "cited": false,
+        "citation_correct": false,
+        "retrieved_relevant": true,
+        "latency_s": 9.34
+      },
+      {
+        "question": "Quanto pesa a prova final no cálculo da média final?",
+        "answerable": true,
+        "expected": [
+          "peso 4",
+          "4 (quatro)",
+          "quatro",
+          "40%"
+        ],
+        "output": "A prova final pesa 4 (quatro) no cálculo da média final [T2].",
+        "refused": false,
+        "correct": true,
+        "cited": true,
+        "citation_correct": true,
+        "retrieved_relevant": true,
+        "latency_s": 10.3
+      },
+      {
+        "question": "Perdi a prova final por estar doente. Até quando posso pedir segunda chamada?",
+        "answerable": true,
+        "expected": [
+          "2 dias úteis",
+          "dois dias úteis",
+          "2 (dois) dias úteis"
+        ],
+        "output": "Você pode pedir segunda chamada até 05 (cinco) dias após a realização da primeira chamada [T2].",
+        "refused": false,
+        "correct": false,
+        "cited": true,
+        "citation_correct": true,
+        "retrieved_relevant": true,
+        "latency_s": 10.13
+      },
+      {
+        "question": "Se eu faltar a uma avaliação, que nota fico nela?",
+        "answerable": true,
+        "expected": [
+          "zero",
+          "0,0"
+        ],
+        "output": "Se o/a discente não atender às condições para realizar a prova final, é considerado/a reprovado/a, com rendimento acadêmico final (média final) igual à média parcial [T4].",
+        "refused": false,
+        "correct": false,
+        "cited": true,
+        "citation_correct": true,
+        "retrieved_relevant": true,
+        "latency_s": 10.25
+      },
+      {
+        "question": "A UFAL abona faltas?",
+        "answerable": true,
+        "expected": [
+          "não existe",
+          "não há abono",
+          "não abona",
+          "não é permitido abono"
+        ],
+        "output": "Não encontrei essa informação nos documentos.",
+        "refused": true,
+        "correct": false,
+        "cited": false,
+        "citation_correct": false,
+        "retrieved_relevant": false,
+        "latency_s": 10.21
+      },
+      {
+        "question": "Até quantos dias depois do início do semestre posso trancar uma disciplina?",
+        "answerable": true,
+        "expected": [
+          "30 dias",
+          "trinta dias"
+        ],
+        "output": "O prazo para trancar uma disciplina no SIGAA [DISCENTES] é de 30 dias após o início do período letivo regular [T4].",
+        "refused": false,
+        "correct": true,
+        "cited": true,
+        "citation_correct": true,
+        "retrieved_relevant": true,
+        "latency_s": 14.31
+      },
+      {
+        "question": "Calouro pode trancar matrícula logo no primeiro período?",
+        "answerable": true,
+        "expected": [
+          "não pode",
+          "não é permitido",
+          "não é possível",
+          "afecção",
+          "serviço militar"
+        ],
+        "output": "Sim, calouros podem trancar matrícula no primeiro período, nos casos de motivo de afecção ou prestação de serviço militar obrigatório, devidamente comprovados pela Perícia Médica Oficial da UFAL [T1].",
+        "refused": false,
+        "correct": true,
+        "cited": true,
+        "citation_correct": true,
+        "retrieved_relevant": true,
+        "latency_s": 11.28
+      },
+      {
+        "question": "Depois que peço o trancamento de uma disciplina no SIGAA, em quanto tempo ele é efetivado?",
+        "answerable": true,
+        "expected": [
+          "7 dias",
+          "sete dias",
+          "7 (sete) dias"
+        ],
+        "output": "O trancamento de matrícula em um componente curricular é efetivado 7 (sete) dias após a solicitação, mesmo que a data de efetivação ocorra após o encerramento do prazo previsto no art. 193, sendo facultado ao/à discente desistir do trancamento durante este período [T2].",
+        "refused": false,
+        "correct": true,
+        "cited": true,
+        "citation_correct": false,
+        "retrieved_relevant": true,
+        "latency_s": 10.58
+      },
+      {
+        "question": "Quantas vezes no máximo posso suspender o curso?",
+        "answerable": true,
+        "expected": [
+          "4 períodos",
+          "quatro períodos",
+          "4 (quatro) períodos"
+        ],
+        "output": "A suspensão de programa é permitida até 4 (quatro) períodos letivos regulares, consecutivos ou não [T5].",
+        "refused": false,
+        "correct": true,
+        "cited": true,
+        "citation_correct": true,
+        "retrieved_relevant": true,
+        "latency_s": 11.01
+      },
+      {
+        "question": "Na matrícula extraordinária dá para se matricular em disciplina que tem pré-requisito?",
+        "answerable": true,
+        "expected": [
+          "não é possível",
+          "não pode",
+          "não é permitid",
+          "não sendo possível"
+        ],
+        "output": "Não é possível a utilização da matrícula extraordinária em turmas de componentes curriculares que exigem pré-requisitos [T2].",
+        "refused": false,
+        "correct": true,
+        "cited": true,
+        "citation_correct": true,
+        "retrieved_relevant": true,
+        "latency_s": 10.22
+      },
+      {
+        "question": "Quem reprovou por falta pode entrar na turma de reposição?",
+        "answerable": true,
+        "expected": [
+          "não pode",
+          "não podendo",
+          "apenas",
+          "somente",
+          "reprovados/as por média",
+          "reprovados por média"
+        ],
+        "output": "Não reprovou por falta, desistentes ou que não obtiveram pontuação mínima suficiente para ir à prova final [T1].",
+        "refused": false,
+        "correct": false,
+        "cited": true,
+        "citation_correct": true,
+        "retrieved_relevant": true,
+        "latency_s": 10.27
+      },
+      {
+        "question": "Para aproveitar uma disciplina cursada em outra faculdade, quanto do conteúdo precisa coincidir?",
+        "answerable": true,
+        "expected": [
+          "75%",
+          "75 %",
+          "setenta e cinco"
+        ],
+        "output": "Um componente curricular pode ser considerado equivalente a outro se o conteúdo do primeiro seja igual ou no mínimo 75% dos objetivos pedagógicos na estrutura curricular do segundo [T2].",
+        "refused": false,
+        "correct": true,
+        "cited": true,
+        "citation_correct": false,
+        "retrieved_relevant": false,
+        "latency_s": 10.71
+      },
+      {
+        "question": "Por quanto tempo dura o mandato do reitor da UFAL?",
+        "answerable": true,
+        "expected": [
+          "4 anos",
+          "quatro anos",
+          "04 (quatro) anos"
+        ],
+        "output": "O mandato do Reitor da UFAL dura 04 (quatro) anos [T2].",
+        "refused": false,
+        "correct": true,
+        "cited": true,
+        "citation_correct": true,
+        "retrieved_relevant": true,
+        "latency_s": 10.75
+      },
+      {
+        "question": "Quem nomeia o reitor?",
+        "answerable": true,
+        "expected": [
+          "Presidente da República"
+        ],
+        "output": "O Presidente da República nomeia o Reitor [T2].",
+        "refused": false,
+        "correct": true,
+        "cited": true,
+        "citation_correct": true,
+        "retrieved_relevant": true,
+        "latency_s": 8.58
+      },
+      {
+        "question": "Quem monta a lista de candidatos a reitor enviada ao governo?",
+        "answerable": true,
+        "expected": [
+          "Conselho Universitário",
+          "CONSUNI"
+        ],
+        "output": "O Conselho Universitário monta a lista de candidatos a Reitor/a, observada a consulta prévia à comunidade universitária [T4].",
+        "refused": false,
+        "correct": true,
+        "cited": true,
+        "citation_correct": false,
+        "retrieved_relevant": true,
+        "latency_s": 10.53
+      },
+      {
+        "question": "Quanto tempo dura o mandato de um estudante representante no conselho universitário?",
+        "answerable": true,
+        "expected": [
+          "1 ano",
+          "um ano",
+          "um (01) ano"
+        ],
+        "output": "O mandato de um estudante representante no Conselho Universitário é de 01 (um) ano [T1].",
+        "refused": false,
+        "correct": false,
+        "cited": true,
+        "citation_correct": false,
+        "retrieved_relevant": true,
+        "latency_s": 10.39
+      },
+      {
+        "question": "O diretor de um instituto pode ser reeleito para o mandato seguinte?",
+        "answerable": true,
+        "expected": [
+          "vedada",
+          "não pode",
+          "não é permitid"
+        ],
+        "output": "Não encontrei essa informação nos documentos.",
+        "refused": true,
+        "correct": false,
+        "cited": false,
+        "citation_correct": false,
+        "retrieved_relevant": true,
+        "latency_s": 10.85
+      },
+      {
+        "question": "Em que ano a UFAL foi criada?",
+        "answerable": true,
+        "expected": [
+          "1961"
+        ],
+        "output": "A UFAL foi criada em 25 de janeiro de 1961 [T5].",
+        "refused": false,
+        "correct": true,
+        "cited": true,
+        "citation_correct": true,
+        "retrieved_relevant": true,
+        "latency_s": 9.08
+      },
+      {
+        "question": "Qual o nome do campus sede da UFAL?",
+        "answerable": true,
+        "expected": [
+          "Aristóteles Calazans Simões",
+          "A. C. Simões"
+        ],
+        "output": "Campus Aristóteles Calazans Simões (Sede) [T1].",
+        "refused": false,
+        "correct": true,
+        "cited": true,
+        "citation_correct": true,
+        "retrieved_relevant": true,
+        "latency_s": 11.26
+      },
+      {
+        "question": "Quem preside o Conselho Universitário?",
+        "answerable": true,
+        "expected": [
+          "Reitor",
+          "reitora"
+        ],
+        "output": "O Conselho Universitário é presidido pelo Reitor, indicado pelo Conselho Universitário [T2].",
+        "refused": false,
+        "correct": true,
+        "cited": true,
+        "citation_correct": false,
+        "retrieved_relevant": false,
+        "latency_s": 10.09
+      },
+      {
+        "question": "Qual a carga horária total do curso de Ciência da Computação?",
+        "answerable": true,
+        "expected": [
+          "3.747",
+          "3747"
+        ],
+        "output": "A carga horária total do curso de Ciência da Computação é de 360 horas [T4].",
+        "refused": false,
+        "correct": false,
+        "cited": true,
+        "citation_correct": false,
+        "retrieved_relevant": false,
+        "latency_s": 10.57
+      },
+      {
+        "question": "Qual o prazo máximo para concluir Ciência da Computação?",
+        "answerable": true,
+        "expected": [
+          "12 semestres",
+          "6 anos",
+          "seis anos",
+          "doze semestres"
+        ],
+        "output": "14 semestres [T1].",
+        "refused": false,
+        "correct": false,
+        "cited": true,
+        "citation_correct": false,
+        "retrieved_relevant": false,
+        "latency_s": 9.08
+      },
+      {
+        "question": "Em quanto tempo dá para se formar em Ciência da Computação, no mínimo?",
+        "answerable": true,
+        "expected": [
+          "8 semestres",
+          "4 anos",
+          "quatro anos",
+          "oito semestres",
+          "08 semestres"
+        ],
+        "output": "O curso de Ciência da Computação da UFAL tem a duração mínima de 08 semestres (4 anos) [T4].",
+        "refused": false,
+        "correct": true,
+        "cited": true,
+        "citation_correct": false,
+        "retrieved_relevant": false,
+        "latency_s": 10.05
+      },
+      {
+        "question": "Quantas vagas por ano o curso de Ciência da Computação oferece?",
+        "answerable": true,
+        "expected": [
+          "80"
+        ],
+        "output": "O curso de Ciência da Computação oferece 80 vagas por ano [T2].",
+        "refused": false,
+        "correct": true,
+        "cited": true,
+        "citation_correct": true,
+        "retrieved_relevant": true,
+        "latency_s": 8.4
+      },
+      {
+        "question": "Ciência da Computação é um curso noturno?",
+        "answerable": true,
+        "expected": [
+          "diurno",
+          "matutino e vespertino"
+        ],
+        "output": "Não encontrei essa informação nos documentos.",
+        "refused": true,
+        "correct": false,
+        "cited": false,
+        "citation_correct": false,
+        "retrieved_relevant": true,
+        "latency_s": 9.72
+      },
+      {
+        "question": "Quantas horas vale o TCC de Ciência da Computação?",
+        "answerable": true,
+        "expected": [
+          "180"
+        ],
+        "output": "O TCC vale 180 horas [T2].",
+        "refused": false,
+        "correct": true,
+        "cited": true,
+        "citation_correct": false,
+        "retrieved_relevant": true,
+        "latency_s": 9.84
+      },
+      {
+        "question": "O TCC de Ciência da Computação pode ser feito em dupla?",
+        "answerable": true,
+        "expected": [
+          "individual"
+        ],
+        "output": "Não encontrei essa informação nos documentos.",
+        "refused": true,
+        "correct": false,
+        "cited": false,
+        "citation_correct": false,
+        "retrieved_relevant": false,
+        "latency_s": 10.68
+      },
+      {
+        "question": "Quantas horas de atividades complementares preciso cumprir em Ciência da Computação?",
+        "answerable": true,
+        "expected": [
+          "240"
+        ],
+        "output": "240 horas [T2].",
+        "refused": false,
+        "correct": true,
+        "cited": true,
+        "citation_correct": false,
+        "retrieved_relevant": true,
+        "latency_s": 10.11
+      },
+      {
+        "question": "Quantas horas de extensão o curso de Ciência da Computação exige?",
+        "answerable": true,
+        "expected": [
+          "375"
+        ],
+        "output": "O curso de Ciência da Computação exige 375 horas de extensão [T5].",
+        "refused": false,
+        "correct": true,
+        "cited": true,
+        "citation_correct": false,
+        "retrieved_relevant": true,
+        "latency_s": 10.99
+      },
+      {
+        "question": "Quantas horas de disciplinas eletivas existem no currículo de Ciência da Computação?",
+        "answerable": true,
+        "expected": [
+          "936"
+        ],
+        "output": "O currículo de Ciência da Computação da UFAL exige um mínimo de 576 horas em disciplinas eletivas [T1].",
+        "refused": false,
+        "correct": false,
+        "cited": true,
+        "citation_correct": true,
+        "retrieved_relevant": true,
+        "latency_s": 12.18
+      },
+      {
+        "question": "Em que dia começam as aulas do semestre 2026.2?",
+        "answerable": true,
+        "expected": [
+          "27/07"
+        ],
+        "output": "As aulas para os componentes que formam turmas do semestre 2026.2 começam no último dia para registro no SIGAA dos conceitos das atividades que não formam turmas [T1].",
+        "refused": false,
+        "correct": false,
+        "cited": true,
+        "citation_correct": false,
+        "retrieved_relevant": false,
+        "latency_s": 18.03
+      },
+      {
+        "question": "Quando começou o semestre 2026.1?",
+        "answerable": true,
+        "expected": [
+          "23/02"
+        ],
+        "output": "O semestre 2026.1 começou em 23/02/26 [T1].",
+        "refused": false,
+        "correct": true,
+        "cited": true,
+        "citation_correct": true,
+        "retrieved_relevant": true,
+        "latency_s": 15.91
+      },
+      {
+        "question": "Qual o último dia para pedir trancamento de disciplina em 2026.2?",
+        "answerable": true,
+        "expected": [
+          "28/08"
+        ],
+        "output": "28/10",
+        "refused": false,
+        "correct": false,
+        "cited": false,
+        "citation_correct": false,
+        "retrieved_relevant": true,
+        "latency_s": 17.91
+      },
+      {
+        "question": "Quando é a semana de provas finais de 2026.2?",
+        "answerable": true,
+        "expected": [
+          "14/12"
+        ],
+        "output": "A semana de provas finais de 2026.2 ocorre de 14 a 18 de dezembro [T2].",
+        "refused": false,
+        "correct": false,
+        "cited": true,
+        "citation_correct": true,
+        "retrieved_relevant": true,
+        "latency_s": 18.76
+      },
+      {
+        "question": "Quando acontece a reavaliação (3ª AV) no semestre 2026.2?",
+        "answerable": true,
+        "expected": [
+          "07/12"
+        ],
+        "output": "A reavaliação (3ª AV) no semestre 2026.2 ocorre de 29/06 a 03/07 [T2].",
+        "refused": false,
+        "correct": false,
+        "cited": true,
+        "citation_correct": false,
+        "retrieved_relevant": true,
+        "latency_s": 16.6
+      },
+      {
+        "question": "Quando abre a solicitação de matrícula para 2026.2?",
+        "answerable": true,
+        "expected": [
+          "13/07"
+        ],
+        "output": "A solicitação de matrícula para o período letivo 2026.2 inicia no dia 13/07 [T2].",
+        "refused": false,
+        "correct": true,
+        "cited": true,
+        "citation_correct": true,
+        "retrieved_relevant": true,
+        "latency_s": 16.16
+      },
+      {
+        "question": "O Dia do Estudante é feriado na UFAL? Em que data cai?",
+        "answerable": true,
+        "expected": [
+          "11/08"
+        ],
+        "output": "O Dia do Estudante é feriado na UFAL e cai em 11/08 [T1].",
+        "refused": false,
+        "correct": true,
+        "cited": true,
+        "citation_correct": true,
+        "retrieved_relevant": true,
+        "latency_s": 13.84
+      },
+      {
+        "question": "Quantos dias letivos o semestre 2026.2 tem no campus A. C. Simões?",
+        "answerable": true,
+        "expected": [
+          "110"
+        ],
+        "output": "O semestre 2026.2 no campus A. C. Simões tem 110 dias letivos.",
+        "refused": false,
+        "correct": true,
+        "cited": false,
+        "citation_correct": false,
+        "retrieved_relevant": true,
+        "latency_s": 18.94
+      },
+      {
+        "question": "Qual o prazo final para lançar as notas da AB1 em 2026.2?",
+        "answerable": true,
+        "expected": [
+          "25/09"
+        ],
+        "output": "Não encontrei essa informação nos documentos.",
+        "refused": true,
+        "correct": false,
+        "cited": false,
+        "citation_correct": false,
+        "retrieved_relevant": false,
+        "latency_s": 14.68
+      },
+      {
+        "question": "Qual o valor da bolsa de iniciação científica?",
+        "answerable": false,
+        "expected": null,
+        "output": "Não encontrei essa informação nos documentos.",
+        "refused": true,
+        "correct": true,
+        "cited": false,
+        "citation_correct": false,
+        "retrieved_relevant": false,
+        "latency_s": 10.19
+      },
+      {
+        "question": "Quanto custa a refeição no restaurante universitário?",
+        "answerable": false,
+        "expected": null,
+        "output": "Não encontrei essa informação nos documentos.",
+        "refused": true,
+        "correct": true,
+        "cited": false,
+        "citation_correct": false,
+        "retrieved_relevant": false,
+        "latency_s": 10.58
+      },
+      {
+        "question": "Qual foi a nota de corte do SISU para Ciência da Computação?",
+        "answerable": false,
+        "expected": null,
+        "output": "Não encontrei essa informação nos documentos.",
+        "refused": true,
+        "correct": true,
+        "cited": false,
+        "citation_correct": false,
+        "retrieved_relevant": false,
+        "latency_s": 10.18
+      },
+      {
+        "question": "Qual o salário inicial de um professor da UFAL?",
+        "answerable": false,
+        "expected": null,
+        "output": "Não encontrei essa informação nos documentos.",
+        "refused": true,
+        "correct": true,
+        "cited": false,
+        "citation_correct": false,
+        "retrieved_relevant": false,
+        "latency_s": 9.39
+      },
+      {
+        "question": "Qual o horário de funcionamento da biblioteca central?",
+        "answerable": false,
+        "expected": null,
+        "output": "Não encontrei essa informação nos documentos.",
+        "refused": true,
+        "correct": true,
+        "cited": false,
+        "citation_correct": false,
+        "retrieved_relevant": false,
+        "latency_s": 8.32
+      },
+      {
+        "question": "Quantos alunos estão matriculados na UFAL atualmente?",
+        "answerable": false,
+        "expected": null,
+        "output": "Não encontrei essa informação nos documentos.",
+        "refused": true,
+        "correct": true,
+        "cited": false,
+        "citation_correct": false,
+        "retrieved_relevant": false,
+        "latency_s": 10.05
+      },
+      {
+        "question": "Qual o horário do ônibus intercampi entre Maceió e Arapiraca?",
+        "answerable": false,
+        "expected": null,
+        "output": "Não encontrei essa informação nos documentos.",
+        "refused": true,
+        "correct": true,
+        "cited": false,
+        "citation_correct": false,
+        "retrieved_relevant": false,
+        "latency_s": 14.74
+      },
+      {
+        "question": "Qual a senha do Wi-Fi da UFAL?",
+        "answerable": false,
+        "expected": null,
+        "output": "Não encontrei essa informação nos documentos.",
+        "refused": true,
+        "correct": true,
+        "cited": false,
+        "citation_correct": false,
+        "retrieved_relevant": false,
+        "latency_s": 11.28
+      }
+    ]
+  }
+}
