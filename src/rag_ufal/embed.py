@@ -35,7 +35,15 @@ class Embedder:
     def __init__(self, model_name: str = config.EMBED_MODEL, device: str = "cpu"):
         # Import tardio: carregar torch + transformers leva alguns segundos,
         # e comandos que só usam BM25 não precisam pagar esse custo.
+        from huggingface_hub.utils import logging as hub_logging
         from sentence_transformers import SentenceTransformer
+        from transformers.utils import logging as transformers_logging
+
+        # Silencia avisos que poluem a CLI a cada execução (ex.: "unauthenticated
+        # requests to the HF Hub", barra "Loading weights"). Erros continuam visíveis.
+        hub_logging.set_verbosity_error()
+        transformers_logging.set_verbosity_error()
+        transformers_logging.disable_progress_bar()
 
         self.model_name = model_name
         self.model = SentenceTransformer(model_name, device=device)
