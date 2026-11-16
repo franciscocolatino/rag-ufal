@@ -1,0 +1,142 @@
+"""Interface de linha de comando: `rag index | search | ask`.
+
+Só orquestra — a lógica fica em ingest/embed/index/generate, para que a
+avaliação (e depois o Gradio) reaproveite exatamente o mesmo código.
+"""
+
+import argparse
+import logging
+import sys
+import textwrap
+import time
+from pathlib import Path
+
+import ollama
+
+from rag_ufal import config
+from rag_ufal.generate import cited_results, is_no_answer, stream_answer
+from rag_ufal.index import SEARCH_MODES, Index, SearchResult
+
+
+def cmd_index(args: argparse.Namespace) -> None:
+    from rag_ufal.embed import Embedder
+    from rag_ufal.ingest import load_corpus
+
+    chunks = load_corpus(args.raw_dir, args.chunk_size, args.overlap)
+    start = time.perf_counter()
+    index = Index.build(chunks, Embedder(args.model), args.chunk_size, args.overlap)
+    index.save(args.index_dir)
+    print(
+        f"{len(chunks)} chunks de {len(index.meta['sources'])} documentos "
+        f"indexados em {time.perf_counter() - start:.0f}s -> {args.index_dir}"
+    )
+
+
+def cmd_search(args: argparse.Namespace) -> None:
+    index = Index.load(args.index_dir)
+    print_results(index.search(args.query, args.k, args.mode))
+
+
+def cmd_ask(args: argparse.Namespace) -> None:
+    index = Index.load(args.index_dir)
+    if args.question:
+        ask_once(index, args.question, args)
+        return
+
+    print("Modo interativo — Enter vazio ou Ctrl+D para sair.")
+    while True:
+        try:
+            question = input("\npergunta> ").strip()
+        except (EOFError, KeyboardInterrupt):
+            break
+        if not question:
+            break
+        ask_once(index, question, args)
+
+
+def ask_once(index: Index, question: str, args: argparse.Namespace) -> None:
+    results = index.search(question, args.k, args.mode)
+    if args.show_context:
+        print_results(results)
+        print()
+
+    parts = []
+    for token in stream_answer(question, results, args.llm):
+        print(token, end="", flush=True)
+        parts.append(token)
+    print()
+
+    text = "".join(parts)
+    if is_no_answer(text):
+        return
+    cited = cited_results(text, results)
+    if cited:
+        print("\nFontes:")
+        for n, r in cited:
+            print(f"  [T{n}] {r.chunk.source}, p. {r.chunk.page}")
+    else:
+        # Transparência: resposta sem citação não deveria acontecer; se acontecer, mostramos.
+        print("\n(o modelo não citou nenhum trecho; trechos recuperados:)")
+        for r in results:
+            print(f"  - {r.chunk.source}, p. {r.chunk.page}")
+
+
+def print_results(results: list[SearchResult]) -> None:
+    if not results:
+        print("(nenhum resultado)")
+    for rank, r in enumerate(results, start=1):
+        print(f"{rank}. {r.chunk.source}, p. {r.chunk.page}  score={r.score:.4f}  ({r.chunk.id})")
+        print(textwrap.indent(textwrap.shorten(r.chunk.text, width=300), "   "))
+
+
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(prog="rag", description="RAG sobre documentos da UFAL")
+    parser.add_argument("--index-dir", type=Path, default=config.INDEX_DIR)
+    sub = parser.add_subparsers(dest="command", required=True)
+
+    p = sub.add_parser("index", help="lê os PDFs, gera embeddings e salva o índice")
+    p.add_argument("--raw-dir", type=Path, default=config.RAW_DIR)
+    p.add_argument("--chunk-size", type=int, default=config.CHUNK_SIZE)
+    p.add_argument("--overlap", type=int, default=config.CHUNK_OVERLAP)
+    p.add_argument("--model", default=config.EMBED_MODEL, help="modelo de embedding")
+    p.set_defaults(func=cmd_index)
+
+    # Opções de busca compartilhadas por `search` e `ask`.
+    retrieval = argparse.ArgumentParser(add_help=False)
+    retrieval.add_argument("-k", type=int, default=config.TOP_K, help="quantos trechos recuperar")
+    retrieval.add_argument("--mode", choices=SEARCH_MODES, default="hybrid")
+
+    p = sub.add_parser("search", parents=[retrieval], help="só o retrieval (debug)")
+    p.add_argument("query")
+    p.set_defaults(func=cmd_search)
+
+    p = sub.add_parser("ask", parents=[retrieval], help="pergunta com resposta do LLM")
+    p.add_argument("question", nargs="?", help="omitir para o modo interativo")
+    p.add_argument("--llm", default=config.LLM_MODEL, help="modelo no Ollama")
+    p.add_argument("--show-context", action="store_true", help="mostra os trechos enviados ao LLM")
+    p.set_defaults(func=cmd_ask)
+
+    return parser
+
+
+def main(argv: list[str] | None = None) -> None:
+    args = build_parser().parse_args(argv)
+
+    logging.basicConfig(level=logging.WARNING, format="%(levelname)s: %(message)s")
+    logging.getLogger("rag_ufal").setLevel(logging.INFO)
+    # PDFs com estrutura levemente corrompida (ex.: o PPC) geram dezenas de
+    # avisos inofensivos do pypdf; o texto é extraído normalmente.
+    logging.getLogger("pypdf").setLevel(logging.ERROR)
+
+    try:
+        args.func(args)
+    except FileNotFoundError as e:
+        sys.exit(f"erro: {e}")
+    except ConnectionError:
+        sys.exit("erro: não consegui falar com o Ollama — ele está rodando? (`ollama serve`)")
+    except ollama.ResponseError as e:
+        sys.exit(f"erro do Ollama: {e.error} — o modelo foi baixado? (`ollama pull {args.llm}`)")
+
+
+if __name__ == "__main__":
+    main()
