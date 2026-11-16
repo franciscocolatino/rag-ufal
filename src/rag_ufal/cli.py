@@ -126,7 +126,7 @@ def build_parser() -> argparse.ArgumentParser:
     # Opções de busca compartilhadas por `search` e `ask`.
     retrieval = argparse.ArgumentParser(add_help=False)
     retrieval.add_argument("-k", type=int, default=config.TOP_K, help="quantos trechos recuperar")
-    retrieval.add_argument("--mode", choices=SEARCH_MODES, default="hybrid")
+    retrieval.add_argument("--mode", choices=SEARCH_MODES, default=config.SEARCH_MODE)
 
     p = sub.add_parser("search", parents=[retrieval], help="só o retrieval (debug)")
     p.add_argument("query")

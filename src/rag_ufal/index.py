@@ -105,7 +105,7 @@ class Index:
 
     # ---------- busca ----------
 
-    def search(self, query: str, k: int = config.TOP_K, mode: str = "hybrid") -> list[SearchResult]:
+    def search(self, query: str, k: int = config.TOP_K, mode: str = config.SEARCH_MODE) -> list[SearchResult]:
         if mode == "dense":
             hits = self._dense(query, k)
         elif mode == "bm25":

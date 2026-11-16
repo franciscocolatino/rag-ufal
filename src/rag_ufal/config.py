@@ -33,6 +33,8 @@ EMBED_MODEL = _env("EMBED_MODEL", "intfloat/multilingual-e5-small")
 EMBED_BATCH_SIZE = _env("EMBED_BATCH_SIZE", 32, int)
 
 # Busca
+# dense é o padrão porque venceu o híbrido (RRF) e o BM25 na avaliação — ver README.
+SEARCH_MODE = _env("SEARCH_MODE", "dense")
 TOP_K = _env("TOP_K", 5, int)
 RRF_K = _env("RRF_K", 60, int)
 
