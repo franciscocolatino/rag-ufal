@@ -1,10 +1,6 @@
-"""Baixa os PDFs públicos da UFAL usados no projeto para data/raw/.
+"""Baixa os PDFs da UFAL para data/raw/ e confere o SHA-256 da versão avaliada.
 
-    uv run python scripts/download_pdfs.py
-
-Cada arquivo é conferido pelo SHA-256 da versão usada na avaliação. Se a UFAL
-publicar uma versão nova no mesmo link, o hash não bate: o script avisa (mas
-mantém o arquivo), porque com outro texto os números do README podem mudar.
+Uso:  uv run python scripts/download_pdfs.py
 """
 
 import hashlib

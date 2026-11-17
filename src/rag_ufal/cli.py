@@ -1,8 +1,4 @@
-"""Interface de linha de comando: `rag index | search | ask`.
-
-Só orquestra — a lógica fica em ingest/embed/index/generate, para que a
-avaliação (e depois o Gradio) reaproveite exatamente o mesmo código.
-"""
+"""CLI: rag index | search | ask | eval."""
 
 import argparse
 import logging
@@ -75,7 +71,6 @@ def ask_once(index: Index, question: str, args: argparse.Namespace) -> None:
         for n, r in cited:
             print(f"  [T{n}] {r.chunk.source}, p. {r.chunk.page}")
     else:
-        # Transparência: resposta sem citação não deveria acontecer; se acontecer, mostramos.
         print("\n(o modelo não citou nenhum trecho; trechos recuperados:)")
         for r in results:
             print(f"  - {r.chunk.source}, p. {r.chunk.page}")
@@ -123,7 +118,6 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--model", default=config.EMBED_MODEL, help="modelo de embedding")
     p.set_defaults(func=cmd_index)
 
-    # Opções de busca compartilhadas por `search` e `ask`.
     retrieval = argparse.ArgumentParser(add_help=False)
     retrieval.add_argument("-k", type=int, default=config.TOP_K, help="quantos trechos recuperar")
     retrieval.add_argument("--mode", choices=SEARCH_MODES, default=config.SEARCH_MODE)
@@ -155,9 +149,7 @@ def main(argv: list[str] | None = None) -> None:
 
     logging.basicConfig(level=logging.WARNING, format="%(levelname)s: %(message)s")
     logging.getLogger("rag_ufal").setLevel(logging.INFO)
-    # PDFs com estrutura levemente corrompida (ex.: o PPC) geram dezenas de
-    # avisos inofensivos do pypdf; o texto é extraído normalmente.
-    logging.getLogger("pypdf").setLevel(logging.ERROR)
+    logging.getLogger("pypdf").setLevel(logging.ERROR)  # avisos inofensivos em alguns PDFs
 
     try:
         args.func(args)

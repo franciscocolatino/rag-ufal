@@ -1,16 +1,5 @@
-"""Preenche a evidência (documento + página) de cada pergunta a partir da âncora.
-
-Cada pergunta de data/eval/questions.jsonl tem um campo `anchor`: uma frase
-LITERAL do PDF que contém a resposta. Este script procura a âncora em todas as
-páginas de todos os PDFs e grava em `evidence` toda (documento, página) onde
-ela aparece.
-
-Por que assim, em vez de digitar a página à mão:
-- elimina erro de digitação de página;
-- acha duplicatas sozinho (o Estatuto/Regimento Geral consolidado contém a
-  Res. 114/2023 inteira, então o mesmo artigo está em dois PDFs);
-- a evidência é por PÁGINA, independente do chunking — dá para comparar
-  tamanhos de chunk com o mesmo dataset.
+"""Preenche `evidence` de cada pergunta: toda (documento, página) onde a `anchor`
+(frase literal do PDF) aparece.
 
 Uso:  uv run python scripts/build_eval.py
 """

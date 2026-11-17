@@ -1,13 +1,7 @@
-"""Índice de busca: dense (embeddings + NumPy), lexical (BM25) e híbrido (RRF).
+"""Índice de busca: dense (NumPy), lexical (BM25) e híbrido (RRF).
 
-Arquivos salvos em INDEX_DIR:
-    embeddings.npy  matriz (N, dim) float32, linhas normalizadas
-    chunks.jsonl    um Chunk por linha, na MESMA ordem das linhas da matriz
-    meta.json       modelo, parâmetros de chunking, etc. — para saber com que
-                    configuração o índice foi gerado (essencial nos experimentos)
-
-O BM25 não é salvo: ele é reconstruído a partir dos chunks no load. É rápido,
-determinístico e evita serializar objetos Python com pickle.
+Salva embeddings.npy, chunks.jsonl (mesma ordem da matriz) e meta.json.
+O BM25 é reconstruído a partir dos chunks no load.
 """
 
 import json
@@ -30,16 +24,11 @@ SEARCH_MODES = ("dense", "bm25", "hybrid")
 @dataclass
 class SearchResult:
     chunk: Chunk
-    score: float  # escala depende do modo: cosseno, BM25 ou RRF — não comparar entre modos
+    score: float  # cosseno, BM25 ou RRF, conforme o modo
 
 
 def tokenize(text: str) -> list[str]:
-    """Tokenização para o BM25: minúsculas, sem acentos, só sequências alfanuméricas.
-
-    Remover acentos faz "matrícula" casar com "matricula" — comum em perguntas
-    digitadas às pressas. NFD separa "í" em "i" + acento combinante, e
-    descartamos os combinantes (categoria Unicode "Mn").
-    """
+    """Tokens do BM25: minúsculas e sem acentos ("matrícula" == "matricula")."""
     text = unicodedata.normalize("NFD", text.lower())
     text = "".join(c for c in text if unicodedata.category(c) != "Mn")
     return re.findall(r"\w+", text)
@@ -62,14 +51,10 @@ class Index:
 
     @property
     def embedder(self) -> Embedder:
-        # A query PRECISA ser codificada pelo mesmo modelo que gerou o índice,
-        # senão os vetores vivem em espaços diferentes e o cosseno não significa
-        # nada. Por isso o modelo vem do meta.json, não do config atual.
+        # A query usa o mesmo modelo que gerou o índice (meta.json), não o do config.
         if self._embedder is None:
             self._embedder = Embedder(self.meta["embed_model"])
         return self._embedder
-
-    # ---------- construção e persistência ----------
 
     @classmethod
     def build(cls, chunks: list[Chunk], embedder: Embedder, chunk_size: int, chunk_overlap: int) -> "Index":
@@ -103,8 +88,6 @@ class Index:
         meta = json.loads((index_dir / "meta.json").read_text(encoding="utf-8"))
         return cls(chunks, embeddings, meta)
 
-    # ---------- busca ----------
-
     def search(self, query: str, k: int = config.TOP_K, mode: str = config.SEARCH_MODE) -> list[SearchResult]:
         if mode == "dense":
             hits = self._dense(query, k)
@@ -117,29 +100,16 @@ class Index:
         return [SearchResult(self.chunks[i], score) for i, score in hits]
 
     def _dense(self, query: str, k: int) -> list[tuple[int, float]]:
-        """Similaridade de cosseno = produto escalar, pois tudo está normalizado.
-
-        (N, dim) @ (dim,) -> (N,): um score por chunk. Busca exata (força bruta);
-        com alguns milhares de chunks isso leva milissegundos, então não há
-        motivo para um índice aproximado (FAISS/HNSW) aqui.
-        """
+        # Vetores normalizados: produto escalar = cosseno.
         scores = self.embeddings @ self.embedder.encode_query(query)
         return _top_k(scores, k)
 
     def _bm25(self, query: str, k: int) -> list[tuple[int, float]]:
         scores = self.bm25.get_scores(tokenize(query))
-        # Score 0 = nenhum termo da query aparece no chunk: não é um resultado.
         return [(i, s) for i, s in _top_k(scores, k) if s > 0]
 
     def _hybrid(self, query: str, k: int, rrf_k: int = config.RRF_K, candidates: int = 50) -> list[tuple[int, float]]:
-        """Reciprocal Rank Fusion: score(d) = Σ_listas 1 / (rrf_k + posição_de_d).
-
-        Usa só a POSIÇÃO em cada ranking, não o score bruto — por isso funciona
-        mesmo com cosseno (~0.7–0.9) e BM25 (0 a dezenas) em escalas diferentes.
-        rrf_k=60 (valor do artigo original) suaviza a vantagem do 1º lugar:
-        1/61 vs 1/62 quase empatam, então aparecer bem nas DUAS listas vale
-        mais que liderar só uma.
-        """
+        """Reciprocal Rank Fusion: score = Σ 1 / (rrf_k + posição) nos dois rankings."""
         n = min(max(candidates, k), len(self.chunks))
         fused: dict[int, float] = {}
         for ranking in (self._dense(query, n), self._bm25(query, n)):

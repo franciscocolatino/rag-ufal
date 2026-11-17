@@ -1,8 +1,4 @@
-"""Experimento: efeito do tamanho do chunk no retrieval.
-
-Para cada (tamanho, overlap) reindexa os PDFs num diretório próprio e mede
-hit@k/MRR nos três modos de busca, com o mesmo dataset. A evidência das
-perguntas é por página, então não depende do chunking.
+"""Experimento: efeito do tamanho do chunk no retrieval (hit@k/MRR nos três modos).
 
 Uso:  uv run python scripts/chunk_experiment.py
 Saída: results/chunk_size.md e results/chunk_size.json

@@ -1,9 +1,5 @@
-"""Configuração central: caminhos, modelos e defaults.
-
-Todo valor pode ser sobrescrito por uma variável de ambiente com prefixo RAG_,
-o que permite rodar experimentos sem editar código, por exemplo:
-
-    RAG_CHUNK_SIZE=300 RAG_CHUNK_OVERLAP=60 rag index
+"""Caminhos, modelos e defaults. Qualquer valor pode ser sobrescrito por
+variável de ambiente, ex.: RAG_CHUNK_SIZE=300 rag index
 """
 
 import os
@@ -15,7 +11,6 @@ def _env(name: str, default, cast=str):
     return cast(value) if value is not None else default
 
 
-# src/rag_ufal/config.py -> parents[2] é a raiz do repositório.
 ROOT = Path(__file__).resolve().parents[2]
 
 DATA_DIR = ROOT / "data"
@@ -33,7 +28,6 @@ EMBED_MODEL = _env("EMBED_MODEL", "intfloat/multilingual-e5-small")
 EMBED_BATCH_SIZE = _env("EMBED_BATCH_SIZE", 32, int)
 
 # Busca
-# dense é o padrão porque venceu o híbrido (RRF) e o BM25 na avaliação — ver README.
 SEARCH_MODE = _env("SEARCH_MODE", "dense")
 TOP_K = _env("TOP_K", 5, int)
 RRF_K = _env("RRF_K", 60, int)

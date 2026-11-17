@@ -1,23 +1,6 @@
-"""Avaliação do pipeline: retrieval (hit@k, MRR) e respostas do LLM.
+"""Avaliação: retrieval (hit@k, MRR@10) e respostas do LLM (acurácia, recusa, citação).
 
-Métricas de retrieval — só nas perguntas que TÊM resposta nos documentos:
-    hit@k   fração das perguntas em que algum trecho relevante aparece no top-k.
-            hit@5 é a que mais importa: são os 5 trechos que vão para o LLM.
-            Se o trecho certo não está lá, o LLM não tem como acertar.
-    MRR@10  média de 1/posição do primeiro trecho relevante (0 se não está no
-            top-10). Diferente do hit@k, premia ter o trecho certo LÁ EM CIMA:
-            1º lugar vale 1, 2º vale 0,5, 5º vale 0,2.
-
-Métricas de resposta (mais lentas: uma chamada ao LLM por pergunta):
-    acurácia         resposta contém a resposta esperada (normalizada)
-    recusa indevida  disse "não encontrei" numa pergunta que tem resposta
-    citação correta  algum trecho citado ([Tn]) é da página esperada
-    recusa correta   disse "não encontrei" numa pergunta SEM resposta — mede
-                     se o sistema admite não saber em vez de alucinar
-
-"Trecho relevante" = chunk de alguma página listada na evidência da pergunta.
-Uma pergunta pode ter várias evidências porque o mesmo artigo aparece em dois
-PDFs (o Estatuto/Regimento Geral consolidado inclui a Res. 114/2023 inteira).
+Um trecho é relevante se vem de alguma (documento, página) da evidência da pergunta.
 """
 
 import json
@@ -107,11 +90,7 @@ def _normalize(text: str) -> str:
 
 
 def answer_matches(expected: str | list[str], output: str) -> bool:
-    """Critério simples e transparente: a resposta esperada aparece no texto gerado.
-
-    Limitação conhecida: não reconhece paráfrases ("sete" vs "7,0"). Por isso o
-    dataset aceita uma lista de formas válidas para a mesma resposta.
-    """
+    """Alguma forma aceita da resposta aparece no texto gerado (sem acento/caixa)."""
     options = expected if isinstance(expected, list) else [expected]
     out = _normalize(output)
     return any(_normalize(e) in out for e in options)

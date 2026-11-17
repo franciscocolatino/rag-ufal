@@ -1,14 +1,4 @@
-"""Wrapper fino sobre o SentenceTransformer.
-
-Por que um wrapper? Dois detalhes que, se esquecidos, derrubam a qualidade do
-retrieval sem dar erro nenhum:
-
-1. Prefixos assimétricos. A família e5 foi treinada vendo "query: " antes de
-   perguntas e "passage: " antes de documentos. Sem eles os vetores caem numa
-   região do espaço que o modelo não conhece bem.
-2. Normalização L2. Com vetores de norma 1, o produto escalar É a similaridade
-   de cosseno — então a busca vira uma única multiplicação de matrizes.
-"""
+"""Wrapper do SentenceTransformer: prefixos do e5 e vetores normalizados."""
 
 import logging
 
@@ -20,11 +10,7 @@ log = logging.getLogger(__name__)
 
 
 def _prefixes(model_name: str) -> tuple[str, str]:
-    """(prefixo_query, prefixo_passage) conforme a família do modelo.
-
-    Deixa a troca de modelo de embedding (um dos experimentos planejados)
-    restrita a uma variável de ambiente.
-    """
+    """Modelos e5 foram treinados com "query: " e "passage: " antes do texto."""
     name = model_name.lower()
     if "e5" in name:
         return "query: ", "passage: "
@@ -33,14 +19,11 @@ def _prefixes(model_name: str) -> tuple[str, str]:
 
 class Embedder:
     def __init__(self, model_name: str = config.EMBED_MODEL, device: str = "cpu"):
-        # Import tardio: carregar torch + transformers leva alguns segundos,
-        # e comandos que só usam BM25 não precisam pagar esse custo.
+        # Import tardio: torch demora alguns segundos para carregar.
         from huggingface_hub.utils import logging as hub_logging
         from sentence_transformers import SentenceTransformer
         from transformers.utils import logging as transformers_logging
 
-        # Silencia avisos que poluem a CLI a cada execução (ex.: "unauthenticated
-        # requests to the HF Hub", barra "Loading weights"). Erros continuam visíveis.
         hub_logging.set_verbosity_error()
         transformers_logging.set_verbosity_error()
         transformers_logging.disable_progress_bar()
@@ -55,7 +38,6 @@ class Embedder:
 
     @property
     def max_tokens(self) -> int:
-        """Textos mais longos que isso são truncados silenciosamente pelo modelo."""
         return self.model.max_seq_length
 
     def encode_passages(self, texts: list[str], batch_size: int = config.EMBED_BATCH_SIZE) -> np.ndarray:
@@ -65,11 +47,7 @@ class Embedder:
         return self._encode(texts, batch_size, progress=True)
 
     def _warn_truncation(self, texts: list[str]) -> None:
-        """Avisa se algum texto passa do limite de tokens (o fim dele seria ignorado).
-
-        Em português o e5 gera ~1,4 token por palavra, então chunks de 200
-        palavras (~280 tokens) cabem com folga nos 512; chunks de 400+ palavras não.
-        """
+        """O modelo corta sem aviso o que passa de max_tokens; aqui avisamos."""
         lengths = [len(ids) for ids in self.model.tokenizer(texts)["input_ids"]]
         too_long = sum(n > self.max_tokens for n in lengths)
         if too_long:
